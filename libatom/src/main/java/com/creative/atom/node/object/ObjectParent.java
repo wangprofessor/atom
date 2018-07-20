@@ -1,35 +1,22 @@
 package com.creative.atom.node.object;
 
-import com.creative.atom.node.ArrayMap;
-import com.creative.atom.node.BaseParent;
 import com.creative.atom.node.INode;
+import com.creative.atom.node.StringKeyParent;
 
 import java.lang.reflect.Array;
 
-public class ObjectParent extends BaseParent {
-    private final ArrayMap arrayMap;
-
+public class ObjectParent extends StringKeyParent {
     private String name;
     private String soleName;
 
     ObjectParent(INode[] children) {
-        arrayMap = new ArrayMap(children);
-    }
-
-    @Override
-    public INode[] getChildren() {
-        return arrayMap.getNodeArray();
-    }
-
-    @Override
-    public INode getChild(Object key) {
-        return arrayMap.get((String) key);
+        super(children);
     }
 
     @Override
     public Object createValue(INode sourceNode, Object sourceValue) {
         int size = sourceNode.getParent().getChildren().length;
-        Class<?> clazz = getNode().getClazz();
+        Class<?> clazz = getNode().getClazzBound();
         Class<?> componentType = clazz.getComponentType();
         return Array.newInstance(componentType, size);
     }

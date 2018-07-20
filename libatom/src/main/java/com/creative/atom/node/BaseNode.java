@@ -1,16 +1,24 @@
 package com.creative.atom.node;
 
 public class BaseNode implements INode {
+    private final int keyType;
+    private final int sizeType;
+    private final int classType;
+
     private final Object originValue;
     private final Class<?> clazz;
 
     private IChild child;
     private IParent parent;
 
-    public BaseNode(Object origin) {
+    public BaseNode(Object origin, int keyType, int sizeType, int classType) {
         if (origin == null) {
             throw new RuntimeException();
         }
+
+        this.keyType = keyType;
+        this.sizeType = sizeType;
+        this.classType = classType;
 
         Type type = Type.create(origin);
         clazz = type.clazz;
@@ -22,7 +30,22 @@ public class BaseNode implements INode {
     }
 
     @Override
-    public Class<?> getClazz() {
+    public int getKeyType() {
+        return keyType;
+    }
+
+    @Override
+    public int getSizeType() {
+        return sizeType;
+    }
+
+    @Override
+    public int getClassType() {
+        return classType;
+    }
+
+    @Override
+    public Class<?> getClazzBound() {
         return clazz;
     }
 

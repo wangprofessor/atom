@@ -10,7 +10,7 @@ public class Type {
         if (node.hasOriginValue()) {
             origin = node.getOriginValue();
         } else {
-            origin = node.getClazz();
+            origin = node.getClazzBound();
         }
         return create(origin);
     }

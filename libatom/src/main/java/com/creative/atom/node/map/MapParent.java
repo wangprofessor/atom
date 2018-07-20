@@ -1,26 +1,13 @@
 package com.creative.atom.node.map;
 
-import com.creative.atom.node.ArrayMap;
-import com.creative.atom.node.BaseParent;
 import com.creative.atom.node.INode;
+import com.creative.atom.node.StringKeyParent;
 
 import java.util.HashMap;
 
-class MapParent extends BaseParent {
-    private final ArrayMap arrayMap;
-
+class MapParent extends StringKeyParent {
     MapParent(INode[] children) {
-        arrayMap = new ArrayMap(children);
-    }
-
-    @Override
-    public INode[] getChildren() {
-        return arrayMap.getNodeArray();
-    }
-
-    @Override
-    public INode getChild(Object key) {
-        return arrayMap.get((String) key);
+        super(children);
     }
 
     @Override

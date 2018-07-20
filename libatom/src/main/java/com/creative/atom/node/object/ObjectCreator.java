@@ -9,7 +9,7 @@ import com.creative.atom.node.IParent;
 class ObjectCreator extends BaseCreator {
     @Override
     public INode createNode(Object origin) {
-        return new BaseNode(origin);
+        return new BaseNode(origin, INode.KEY_STRING, INode.SIZE_FIXED, INode.CLASS_BOUNDED);
     }
 
     @Override

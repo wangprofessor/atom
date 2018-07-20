@@ -1,11 +1,17 @@
 package com.creative.atom.node.list;
 
 import com.creative.atom.node.BaseCreator;
+import com.creative.atom.node.BaseNode;
 import com.creative.atom.node.IChild;
 import com.creative.atom.node.INode;
 import com.creative.atom.node.IParent;
 
 class ListCreator extends BaseCreator {
+    @Override
+    public INode createNode(Object origin) {
+        return new BaseNode(origin, INode.KEY_INT, INode.SIZE_UNFIXED, INode.CLASS_UNBOUNDED);
+    }
+
     @Override
     public IParent createParent(INode[] children) {
         return new ListParent(children);
