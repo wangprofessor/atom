@@ -1,1 +1,1 @@
-include 'libatom', 'libatomplugin'
+include 'libatom'

@@ -9,7 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/libatom" />
-            <option value="$PROJECT_DIR$/libatomplugin" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

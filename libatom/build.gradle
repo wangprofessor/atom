@@ -1,10 +1,1 @@
 apply plugin: 'java'
-
-dependencies {
-    testCompileOnly files('libs/sqlitejdbc-v033-nested.jar')
-    compile files('libs/json-20170516.jar')
-    compile 'com.squareup.okio:okio:1.14.1'
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    compile 'com.google.protobuf:protobuf-java:3.1.0'
-    implementation 'com.android.tools.build:builder:3.1.2'
-}
