@@ -1,18 +1,25 @@
 package com.creative.atom.node;
 
 import com.creative.atom.node.array.ArrayHolder;
+import com.creative.atom.node.list.ListHolder;
+import com.creative.atom.node.map.MapHolder;
+import com.creative.atom.node.object.ObjectHolder;
 import com.creative.atom.node.primitive.PrimitiveHolder;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class HolderManager {
     public static final IHolder sPrimitiveHolder = new PrimitiveHolder();
-
+    private static final IHolder sObjectHolder = new ObjectHolder();
     private static final IHolder sArrayHolder = new ArrayHolder();
-    private static final HashMap<Class<?>, IHolder> sHolderMap = new HashMap<>();
+
+    private static final ArrayList<IHolderProvider> sHolderProviderList = new ArrayList<>();
 
     static {
-        initPrimitive();
+        registerHolderProvider(new MapHolderProvider());
+        registerHolderProvider(new ListHolderProvider());
     }
 
     public static boolean isClassPrimitive(Class<?> clazz) {
@@ -28,26 +35,60 @@ public class HolderManager {
                 Short.class.isAssignableFrom(clazz);
     }
 
-    private static void initPrimitive() {
-        sHolderMap.put(String.class, null);
-
-        sHolderMap.put(Integer.class, null);
-        sHolderMap.put(Long.class, null);
-        sHolderMap.put(Boolean.class, null);
-        sHolderMap.put(Float.class, null);
-        sHolderMap.put(Double.class, null);
-        sHolderMap.put(Character.class, null);
-        sHolderMap.put(Byte.class, null);
-        sHolderMap.put(Short.class, null);
+    public static void registerHolderProvider(IHolderProvider holderProvider) {
+        sHolderProviderList.add(holderProvider);
     }
 
     public static IHolder getHolder(Class<?> clazz) {
-        if (clazz.isPrimitive()) {
-            return null;
+        int size = sHolderProviderList.size();
+        for (int i = size -1; i >= 0; i--) {
+            IHolderProvider holderProvider = sHolderProviderList.get(i);
+            if (holderProvider.isMatch(clazz)) {
+                return holderProvider.getHolder();
+            }
+
         }
+
         if (clazz.isArray()) {
             return sArrayHolder;
         }
-        return sHolderMap.get(clazz);
+        if (isClassPrimitive(clazz)) {
+            return null;
+        }
+
+        return sObjectHolder;
+    }
+
+    public interface IHolderProvider {
+        boolean isMatch(Class<?> clazz);
+        IHolder getHolder();
+    }
+
+    private static class MapHolderProvider implements IHolderProvider {
+        private static final IHolder sMapHolder = new MapHolder();
+
+        @Override
+        public boolean isMatch(Class<?> clazz) {
+            return Map.class.isAssignableFrom(clazz);
+        }
+
+        @Override
+        public IHolder getHolder() {
+            return sMapHolder;
+        }
+    }
+
+    private static class ListHolderProvider implements IHolderProvider {
+        private static final IHolder sListHolder = new ListHolder();
+
+        @Override
+        public boolean isMatch(Class<?> clazz) {
+            return List.class.isAssignableFrom(clazz);
+        }
+
+        @Override
+        public IHolder getHolder() {
+            return sListHolder;
+        }
     }
 }

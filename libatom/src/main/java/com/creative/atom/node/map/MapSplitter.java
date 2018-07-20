@@ -1,4 +1,4 @@
-package com.creative.atom.node.array;
+package com.creative.atom.node.map;
 
 import com.creative.atom.node.BaseSplitter;
 import com.creative.atom.node.IChild;
@@ -6,9 +6,10 @@ import com.creative.atom.node.INode;
 import com.creative.atom.node.IParent;
 import com.creative.atom.node.Type;
 
-import java.lang.reflect.Array;
+import java.util.List;
+import java.util.Map;
 
-class ArraySplitter extends BaseSplitter {
+class MapSplitter extends BaseSplitter {
     @Override
     public IParent split(INode node) {
         Type type = Type.create(node);
@@ -16,20 +17,23 @@ class ArraySplitter extends BaseSplitter {
             return creator.createParent(new INode[0]);
         }
 
-        int size = Array.getLength(type.origin);
+        Map<String, Object> list = (Map) type.origin;
+        int size = list.size();
         INode[] nodeArray = new INode[size];
-        for (int i = 0; i < size; i++) {
+        int i = 0;
+        for (Map.Entry<String, Object> entry : list.entrySet()) {
+            String key = entry.getKey();
+            Object childValue = entry.getValue();
             INode childNode;
-            Object childValue = Array.get(type.origin, i);
             if (childValue == null) {
-                Class<?> componentType = type.clazz.getComponentType();
-                childNode = creator.createNode(componentType);
+                nodeArray[i] = null;
             } else {
                 childNode = creator.createNode(childValue);
+                IChild child = creator.createChild(key);
+                childNode.setChild(child);
+                nodeArray[i] = childNode;
             }
-            IChild child = creator.createChild(i);
-            childNode.setChild(child);
-            nodeArray[i] = childNode;
+            i++;
         }
         return creator.createParent(nodeArray);
     }

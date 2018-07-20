@@ -1,4 +1,4 @@
-package com.creative.atom.node.array;
+package com.creative.atom.node.list;
 
 import com.creative.atom.node.BaseSplitter;
 import com.creative.atom.node.IChild;
@@ -6,9 +6,9 @@ import com.creative.atom.node.INode;
 import com.creative.atom.node.IParent;
 import com.creative.atom.node.Type;
 
-import java.lang.reflect.Array;
+import java.util.List;
 
-class ArraySplitter extends BaseSplitter {
+class ListSplitter extends BaseSplitter {
     @Override
     public IParent split(INode node) {
         Type type = Type.create(node);
@@ -16,20 +16,20 @@ class ArraySplitter extends BaseSplitter {
             return creator.createParent(new INode[0]);
         }
 
-        int size = Array.getLength(type.origin);
+        List list = (List) type.origin;
+        int size = list.size();
         INode[] nodeArray = new INode[size];
         for (int i = 0; i < size; i++) {
             INode childNode;
-            Object childValue = Array.get(type.origin, i);
+            Object childValue = list.get(i);
             if (childValue == null) {
-                Class<?> componentType = type.clazz.getComponentType();
-                childNode = creator.createNode(componentType);
+                nodeArray[i] = null;
             } else {
                 childNode = creator.createNode(childValue);
+                IChild child = creator.createChild(i);
+                childNode.setChild(child);
+                nodeArray[i] = childNode;
             }
-            IChild child = creator.createChild(i);
-            childNode.setChild(child);
-            nodeArray[i] = childNode;
         }
         return creator.createParent(nodeArray);
     }
