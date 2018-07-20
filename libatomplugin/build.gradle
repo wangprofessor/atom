@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+dependencies {
+    compile 'com.android.tools.build:gradle:3.1.2'
+    compile gradleApi()
+
+    compile 'org.javassist:javassist:3.22.0-GA'
+    compile 'org.ow2.asm:asm:5.1'
+    compile 'org.ow2.asm:asm-commons:5.1'
+
+    compile project(':libatom')
+}
