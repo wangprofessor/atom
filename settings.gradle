@@ -1,1 +1,1 @@
-include 'libatom'
+include 'libatom', 'libinject'
